@@ -25,20 +25,22 @@ dtype = torch.float32 # Choose float32 or 64 etc.
 
 
 ## Settings for the reachability map:
-robot_urdf = "tiago_dual.urdf"
-name_end_effector = "gripper_left_grasping_frame" # "arm_left_tool_link"
+robot_urdf = "/opt/ros/noetic/share/hsrb_description/robots/hsrb4s.urdf"
+name_end_effector = "hand_motor_dummy_link" # "arm_left_tool_link"
 name_base_link = "base_footprint"
-use_torso = False
-n_dof = 8 # Implied from the URDF and chosen links. 'use_torso=False' will reduce this by one in practice
+use_torso = True
+n_dof = 7 # Implied from the URDF and chosen links. 'use_torso=False' will reduce this by one in practice
 # Number of DOFs and joint limits
-joint_pos_min = torch.tensor([0.0, -1.1780972451, -1.1780972451, -0.785398163397, -0.392699081699, -2.09439510239, -1.41371669412, -2.09439510239], dtype=dtype, device=d)
-joint_pos_max = torch.tensor([+0.35, +1.57079632679, +1.57079632679, +3.92699081699, +2.35619449019, +2.09439510239, +1.41371669412, +2.09439510239], dtype=dtype, device=d)
+joint_pos_min = torch.tensor([0.0, -2.617, -1.919, -1.919, -1.919, 0.00, -0.105 ], dtype=dtype, device=d)
+joint_pos_max = torch.tensor([+0.69, +0.0, +3.665, +1.221, +3.665, 0.0000000001, 1.239], dtype=dtype, device=d)
 joint_pos_centers = joint_pos_min + (joint_pos_max - joint_pos_min)/2
 joint_pos_range_sq = (joint_pos_max - joint_pos_min).pow(2)/4
 ## Build kinematic chain from URDF
 print("[Building kinematic chain from URDF...]:\n...\n...")
 chain = pk.build_serial_chain_from_urdf(open(robot_urdf).read(), name_end_effector)
 chain = chain.to(dtype=dtype, device=d)
+print("[Joint names]:")
+print(chain.get_joint_parameter_names())
 assert (len(chain.get_joint_parameter_names()) == n_dof), "Incorrect number of DOFs set"
 print("...\n...")
 # Number of Forward Kinematic solutions to sample

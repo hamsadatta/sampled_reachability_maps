@@ -26,8 +26,8 @@ dtype = torch.float32 # Choose float32 or 64 etc.
 
 
 ## Settings for the reachability map:
-robot_urdf = "tiago_dual.urdf"
-name_end_effector = "gripper_left_grasping_frame" # "arm_left_tool_link"
+robot_urdf = "/opt/ros/noetic/share/hsrb_description/robots/hsrb.urdf"
+name_end_effector = "hand_motor_dummy_link" # "arm_left_tool_link"
 name_base_link = "base_footprint"
 n_dof = 8 # Implied from the URDF and chosen links
 use_torso = False
